@@ -1,0 +1,23 @@
+apply from: "dependencies.gradle"
+
+buildscript {
+    apply from: "dependencies.gradle"
+
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+
+    dependencies {
+        classpath gradlePlugins.kotlin
+    }
+}
+
+allprojects {
+    repositories {
+        mavenCentral()
+    }
+}
+

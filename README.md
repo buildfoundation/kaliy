@@ -22,3 +22,4 @@
 - User-modules (ServiceLoader)
 - Configurable multi-project support: storage size, auth
 - Storage systems: Apache Ignite, Apache Hazelcast
+- Data deduplication by content checksum (ie different compiler flags can result in same output)

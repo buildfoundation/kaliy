@@ -1,0 +1,14 @@
+apply plugin: "kotlin"
+
+dependencies {
+    api libraries.kotlinStdlib
+}
+
+dependencies {
+    implementation libraries.moshi
+}
+
+dependencies {
+    testImplementation libraries.junit4
+    testImplementation libraries.assertj
+}
