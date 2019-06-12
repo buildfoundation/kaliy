@@ -1,0 +1,12 @@
+.gradle
+build/
+
+/.idea/
+out/
+*.iml
+
+.DS_Store
+
+# Share code style.
+!.idea/codeStyleSettings.xml
+
