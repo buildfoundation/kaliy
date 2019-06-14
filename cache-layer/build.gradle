@@ -3,4 +3,5 @@ apply plugin: "kotlin"
 
 dependencies {
     api libraries.kotlinStdlib
+    api project(":config")
 }

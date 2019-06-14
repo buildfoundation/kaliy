@@ -1,4 +1,5 @@
 package io.buildfoundation.kaliy.cachelayer
 
-interface CacheLayer {
-}
+import io.buildfoundation.kaliy.config.Config
+
+abstract class CacheLayer(protected val config: Config.Layer)
