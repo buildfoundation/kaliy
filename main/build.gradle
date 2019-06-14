@@ -7,6 +7,8 @@ dependencies {
     implementation libraries.kotlinStdlib
     implementation libraries.rxJava
     implementation libraries.rxKotlin
+    implementation libraries.kotlinArgParser
+
     implementation project(":config")
     implementation project(":module-loader")
 }
