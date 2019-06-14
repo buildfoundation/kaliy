@@ -7,9 +7,7 @@ import org.junit.Test
 
 class ModuleLoaderTest {
 
-    class MyLayerWithoutConstructor : CacheLayer {
-
-    }
+    class MyLayerWithoutConstructor : CacheLayer
 
     @Test
     fun name() {
@@ -19,7 +17,7 @@ class ModuleLoaderTest {
                 comment = "My layer",
                 timeoutMs = 1000,
                 config = mapOf("volodya" to "umerii")
-        )).let { it as ModuleLoadResult.Error }?.cause)
+        )).let { it as ModuleLoadResult.Error }.cause)
                 .isInstanceOf(IllegalStateException::class.java)
                 .hasMessage("Class io.buildfoundation.kaliy.moduleloader.ModuleLoaderTest\$MyLayerWithoutConstructor does not have a constructor that takes io.buildfoundation.kaliy.config.Config.Layer")
     }
