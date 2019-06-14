@@ -14,10 +14,7 @@ fun loadLayer(layer: Config.Layer): ModuleLoadResult {
                 .forName(layer.`class`)
                 .constructors
                 .firstOrNull { it.parameters.size == 1 && it.parameterTypes[0].isAssignableFrom(Config.Layer::class.java) }
-
-        if (constructor == null) {
-            throw IllegalStateException("Class ${layer.`class`} does not have a constructor that takes ${Config.Layer::class.java.canonicalName}")
-        }
+                ?: throw IllegalStateException("Class ${layer.`class`} does not have a constructor that takes ${Config.Layer::class.java.canonicalName}")
 
         ModuleLoadResult.Ok(constructor.newInstance(layer) as CacheLayer)
     } catch (t: Throwable) {
