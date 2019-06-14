@@ -14,12 +14,12 @@
 - Data consistency check
 - Universal stream management system (memory + disk)
 - 100% non-blocking IO (epoll + AIO)
-- Storage systems: in-memory, disk, AWS S3 and S3 compatible systems, Redis
+- Storage systems: in-memory, disk, AWS S3 and S3 compatible systems, Redis, Kaliy (recursive)
 - Reactive internally
+- User-modules (ServiceLoader)
 
 ### Expectations v2
 
-- User-modules (ServiceLoader)
 - Configurable multi-project support: storage size, auth
 - Storage systems: Apache Ignite, Apache Hazelcast
 - Data deduplication by content checksum (ie different compiler flags can result in same output)

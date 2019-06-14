@@ -1,0 +1,13 @@
+apply plugin: "java-library"
+apply plugin: "kotlin"
+
+dependencies {
+    api libraries.kotlinStdlib
+    api project(":cache-layer")
+    api project(":config")
+}
+
+dependencies {
+    testImplementation libraries.junit4
+    testImplementation libraries.assertj
+}

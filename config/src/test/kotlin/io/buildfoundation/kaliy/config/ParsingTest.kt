@@ -56,13 +56,13 @@ class ParsingTest {
         )
 
         assertThat(parseConfig(configFile)).isEqualTo(Config(
-                http = Http(port = 80),
-                batching = Batching(
-                        get = Batching.Get(windowMs = 1000, windowSize = 100),
-                        put = Batching.Put(windowMs = 2000, windowSize = 200)
+                http = Config.Http(port = 80),
+                batching = Config.Batching(
+                        get = Config.Batching.Get(windowMs = 1000, windowSize = 100),
+                        put = Config.Batching.Put(windowMs = 2000, windowSize = 200)
                 ),
                 layers = listOf(
-                        Layer(
+                        Config.Layer(
                                 name = "memory",
                                 `class` = "com.memory.Memory",
                                 comment = "I am memory comment",
@@ -71,7 +71,7 @@ class ParsingTest {
                                         "size" to "64M"
                                 )
                         ),
-                        Layer(
+                        Config.Layer(
                                 name = "S3",
                                 `class` = "com.aws.S3",
                                 comment = "I am S3 comment",

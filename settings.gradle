@@ -1,2 +1,4 @@
 include ":main"
 include ":config"
+include ":cache-layer"
+include ":module-loader"

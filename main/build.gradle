@@ -5,7 +5,10 @@ mainClassName = "io.buildfoundation.kaliy.main.Main"
 
 dependencies {
     implementation libraries.kotlinStdlib
+    implementation libraries.rxJava
+    implementation libraries.rxKotlin
     implementation project(":config")
+    implementation project(":module-loader")
 }
 
 // TODO: move to allprojects.
