@@ -3,6 +3,7 @@
 package io.buildfoundation.kaliy.main
 
 import io.buildfoundation.kaliy.config.parseConfig
+import io.buildfoundation.kaliy.http.netty.httpServer
 import io.buildfoundation.kaliy.moduleloader.loadLayer
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -26,8 +27,10 @@ internal fun main(rawArgs: Array<String>) {
                         }
                         .toList()
             }
-            .subscribe()
-            .also { registerShutdownHook(it) }
+//            .subscribe()
+//            .also { registerShutdownHook(it) }
+
+    registerShutdownHook(httpServer(8080).subscribe())
 }
 
 private fun registerShutdownHook(disposable: Disposable) {

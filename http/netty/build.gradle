@@ -1,0 +1,13 @@
+apply plugin: "java-library"
+apply plugin: "kotlin"
+
+dependencies {
+    api libraries.kotlinStdlib
+    api libraries.rxKotlin
+    api libraries.rxJava
+    api project(":http:api")
+}
+
+dependencies {
+    implementation libraries.netty
+}

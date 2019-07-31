@@ -11,6 +11,7 @@ dependencies {
 
     implementation project(":config")
     implementation project(":module-loader")
+    implementation project(":http:netty")
 }
 
 // TODO: move to allprojects.
