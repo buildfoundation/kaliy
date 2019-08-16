@@ -1,0 +1,10 @@
+apply plugin: "java-library"
+apply plugin: "kotlin"
+
+dependencies {
+    api project(":swap:api")
+}
+
+dependencies {
+    implementation libraries.rxKotlin
+}
