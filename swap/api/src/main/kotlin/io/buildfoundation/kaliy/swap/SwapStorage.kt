@@ -4,7 +4,7 @@ import io.reactivex.Flowable
 import io.reactivex.Single
 import java.nio.ByteBuffer
 
-interface Swap {
+interface SwapStorage {
     sealed class Data {
         sealed class Chunk {
             class Ok(val byteBuffer: ByteBuffer): Chunk()
@@ -15,5 +15,5 @@ interface Swap {
         class Er(val cause: Throwable) : Data()
     }
 
-    fun from(bytesCount: Long, stream: Flowable<ByteBuffer>): Single<Data>
+    fun put(stream: Flowable<ByteBuffer>, bytesCount: Long): Single<Data>
 }
