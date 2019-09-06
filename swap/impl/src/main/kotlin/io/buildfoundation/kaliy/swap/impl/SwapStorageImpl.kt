@@ -38,12 +38,13 @@ class SwapStorageImpl(private val configuration: Configuration) : SwapStorage {
 
     private fun toMemory(bytesCount: Int, stream: Flowable<ByteBuffer>): Single<SwapStorage.Data> {
         return stream
-                .collect({ ByteBuffer.allocate(bytesCount) }, { data, buf -> data.put(buf) })
+                .collect({ ByteBuffer.allocate(bytesCount) }, { data, buf -> buf.position(0); data.put(buf) })
                 .map<SwapStorage.Data> { SwapStorage.Data.Ok(Flowable.just(SwapStorage.Data.Chunk.Ok(it))) }
                 .onErrorReturn { SwapStorage.Data.Er(it) }
     }
 
     private fun toDisk(bytesCount: Long, stream: Flowable<ByteBuffer>): Single<SwapStorage.Data> {
+        // TODO bytesCount unused
         return Single
                 .using(
                         {

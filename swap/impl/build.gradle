@@ -8,3 +8,8 @@ dependencies {
 dependencies {
     implementation libraries.rxKotlin
 }
+
+dependencies {
+    testImplementation libraries.junit4
+    testImplementation libraries.assertj
+}

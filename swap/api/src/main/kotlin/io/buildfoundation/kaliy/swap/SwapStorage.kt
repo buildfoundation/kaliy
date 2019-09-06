@@ -7,7 +7,7 @@ import java.nio.ByteBuffer
 interface SwapStorage {
     sealed class Data {
         sealed class Chunk {
-            class Ok(val byteBuffer: ByteBuffer): Chunk()
+            data class Ok(val byteBuffer: ByteBuffer): Chunk()
             class Er(val cause: Throwable): Chunk()
         }
 
