@@ -25,8 +25,11 @@ class SwapImpl(private val configuration: Configuration) : Swap {
     private val filenameGenerator = AtomicInteger()
 
     override fun from(bytesCount: Long, stream: Flowable<ByteBuffer>): Single<Swap.Data> {
-
-        return toMemory(bytesCount, stream)
+        if (bytesCount > Int.MAX_VALUE) {
+            TODO()
+        } else {
+            return toMemory(bytesCount.toInt(), stream)
+        }
     }
 
     private fun toMemory(bytesCount: Int, stream: Flowable<ByteBuffer>): Single<Swap.Data> {
