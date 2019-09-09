@@ -1,4 +1,5 @@
 apply from: "dependencies.gradle"
+apply from: "gradle/dependency-resolution.gradle"
 
 buildscript {
     apply from: "dependencies.gradle"
@@ -20,4 +21,3 @@ allprojects {
         mavenCentral()
     }
 }
-

@@ -4,7 +4,7 @@ package io.buildfoundation.kaliy.main
 
 import io.buildfoundation.kaliy.config.parseConfig
 import io.buildfoundation.kaliy.http.netty.httpServer
-import io.buildfoundation.kaliy.moduleloader.loadLayer
+import io.buildfoundation.kaliy.moduleloader.loadCacheLayer
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.disposables.Disposable
@@ -22,7 +22,7 @@ internal fun main(rawArgs: Array<String>) {
                         .fromIterable(it.layers)
                         .flatMapSingle { layer ->
                             Single
-                                    .fromCallable { loadLayer(layer) }
+                                    .fromCallable { loadCacheLayer(layer) }
                                     .subscribeOn(Schedulers.computation())
                         }
                         .toList()

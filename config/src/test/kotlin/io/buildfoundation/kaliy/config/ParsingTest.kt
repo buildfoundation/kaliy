@@ -17,7 +17,17 @@ class ParsingTest {
         configFile.writeText("""
             {
               "http": {
-                "port": 80
+                "port": 80,
+                "handlers": [
+                  {
+                    "endpoint": "gradle",
+                    "class": "io.buildfoundation.buildcache.gradle.HttpHandler",
+                    "config": {
+
+                    },
+                    "comment": "I am Gradle Cache HTTP handler"
+                  }
+                ]
               },
               "batching": {
                 "get": {
@@ -56,7 +66,16 @@ class ParsingTest {
         )
 
         assertThat(parseConfig(configFile)).isEqualTo(Config(
-                http = Config.Http(port = 80),
+                http = Config.Http(
+                        port = 80,
+                        handlers = listOf(
+                                Config.Http.Handler(
+                                        endpoint = "gradle",
+                                        `class` = "io.buildfoundation.buildcache.gradle.HttpHandler",
+                                        config = emptyMap(),
+                                        comment = "I am Gradle Cache HTTP handler"
+                                )
+                        )),
                 batching = Config.Batching(
                         get = Config.Batching.Get(windowMs = 1000, windowSize = 100),
                         put = Config.Batching.Put(windowMs = 2000, windowSize = 200)

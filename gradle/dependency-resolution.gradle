@@ -1,0 +1,13 @@
+subprojects { subProject ->
+    afterEvaluate {
+        subProject.configurations.all { configuration ->
+            resolutionStrategy {
+                def allLibraries = libraries.values()
+
+                allLibraries.each { library ->
+                    force library
+                }
+            }
+        }
+    }
+}

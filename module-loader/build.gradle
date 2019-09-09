@@ -5,6 +5,7 @@ dependencies {
     api libraries.kotlinStdlib
     api project(":cache-layer")
     api project(":config")
+    api project(":http:api")
 }
 
 dependencies {

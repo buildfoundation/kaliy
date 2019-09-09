@@ -7,12 +7,11 @@ import org.junit.Test
 
 class ModuleLoaderTest {
 
-
     @Test
     fun `error when can't find constructor`() {
         class MyLayer : CacheLayer(Config.Layer("", "", "", 0, mapOf()))
 
-        assertThat(loadLayer(Config.Layer(
+        assertThat(loadCacheLayer(Config.Layer(
                 name = "my-layer",
                 `class` = MyLayer::class.java.name,
                 comment = "My layer",
@@ -27,7 +26,7 @@ class ModuleLoaderTest {
     fun `error when class doesn't implements CacheLayer`() {
         data class MyLayer(val config: Config.Layer)
 
-        assertThat(loadLayer(Config.Layer(
+        assertThat(loadCacheLayer(Config.Layer(
                 name = "my-layer",
                 `class` = MyLayer::class.java.name,
                 comment = "My layer",
@@ -50,7 +49,7 @@ class ModuleLoaderTest {
                 config = mapOf()
         )
 
-        val layer = (loadLayer(config) as ModuleLoadResult.Ok).cacheLayer as MyLayer
+        val layer = (loadCacheLayer(config) as ModuleLoadResult.Ok).instance as MyLayer
 
         assertThat(layer.myConfig).isEqualTo(config)
     }
@@ -63,7 +62,7 @@ class ModuleLoaderTest {
             }
         }
 
-        assertThat(loadLayer(Config.Layer(
+        assertThat(loadCacheLayer(Config.Layer(
                 name = "my-layer",
                 `class` = MyLayer::class.java.name,
                 comment = "My layer",
@@ -76,7 +75,7 @@ class ModuleLoaderTest {
 
     @Test
     fun `error when class not found`() {
-        assertThat(loadLayer(Config.Layer(
+        assertThat(loadCacheLayer(Config.Layer(
                 name = "my-layer",
                 `class` = "???",
                 comment = "My layer",
