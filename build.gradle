@@ -1,5 +1,6 @@
 apply from: "dependencies.gradle"
 apply from: "gradle/dependency-resolution.gradle"
+apply from: "gradle/kotlin.gradle"
 
 buildscript {
     apply from: "dependencies.gradle"

@@ -32,7 +32,7 @@ class SwapStorageImpl(private val configuration: Configuration) : SwapStorage {
         }
     }
 
-    private fun enoughMemory(bytesCount: Long): Boolean {
+    private fun enoughMemory(@Suppress("UNUSED_PARAMETER") bytesCount: Long): Boolean {
         return true
     }
 
@@ -43,7 +43,7 @@ class SwapStorageImpl(private val configuration: Configuration) : SwapStorage {
                 .onErrorReturn { SwapStorage.Data.Er(it) }
     }
 
-    private fun toDisk(bytesCount: Long, stream: Flowable<ByteBuffer>): Single<SwapStorage.Data> {
+    private fun toDisk(@Suppress("UNUSED_PARAMETER") bytesCount: Long, stream: Flowable<ByteBuffer>): Single<SwapStorage.Data> {
         // TODO bytesCount unused
         return Single
                 .using(
