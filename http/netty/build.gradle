@@ -6,8 +6,10 @@ dependencies {
     api libraries.rxKotlin
     api libraries.rxJava
     api project(":http:api")
+    api project(":config")
 }
 
 dependencies {
+    implementation project(":module-loader")
     implementation libraries.netty
 }

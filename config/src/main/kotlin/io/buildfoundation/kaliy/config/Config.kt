@@ -2,6 +2,12 @@ package io.buildfoundation.kaliy.config
 
 import com.squareup.moshi.Json
 
+val DEFAULT_CONFIG = Config(
+        http = Config.Http(8080, listOf()),
+        batching = Config.Batching(Config.Batching.Get(42L, 42), Config.Batching.Put(42L, 42)),
+        layers = listOf()
+)
+
 data class Config(
         @Json(name = "http") val http: Http,
         @Json(name = "batching") val batching: Batching,

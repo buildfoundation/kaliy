@@ -2,6 +2,7 @@
 
 package io.buildfoundation.kaliy.main
 
+import io.buildfoundation.kaliy.config.DEFAULT_CONFIG
 import io.buildfoundation.kaliy.config.parseConfig
 import io.buildfoundation.kaliy.http.netty.httpServer
 import io.buildfoundation.kaliy.moduleloader.loadCacheLayer
@@ -30,7 +31,9 @@ internal fun main(rawArgs: Array<String>) {
 //            .subscribe()
 //            .also { registerShutdownHook(it) }
 
-    registerShutdownHook(httpServer(8080).subscribe())
+    httpServer(DEFAULT_CONFIG.http).subscribe().also {
+        registerShutdownHook(it)
+    }
 }
 
 private fun registerShutdownHook(disposable: Disposable) {
