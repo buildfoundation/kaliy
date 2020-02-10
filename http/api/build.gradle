@@ -2,6 +2,7 @@ apply plugin: "java-library"
 apply plugin: "kotlin"
 
 dependencies {
+    api project(':config')
     api libraries.kotlinStdlib
     api libraries.okHttp
     api libraries.rxJava
