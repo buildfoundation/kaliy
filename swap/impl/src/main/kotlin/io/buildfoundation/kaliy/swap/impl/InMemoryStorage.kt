@@ -9,7 +9,7 @@ internal class InMemoryStorage(private val capacityBytes: Long) : Storage {
     // Reuse same exception to avoid allocation and stacktrace re-capturing.
     private object NotEnoughMemoryException : Exception()
 
-    private val utilizedBytes = AtomicLong()
+    internal val utilizedBytes = AtomicLong()
 
     override fun hold(chunk: ByteArray): Single<ChunkDescriptor> = Single
             .create { emitter ->

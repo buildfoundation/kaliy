@@ -23,7 +23,7 @@ class SwapImpl(private val configuration: Configuration) : Swap {
             val ioScheduler: Scheduler
     )
 
-    private val inMemoryStorage = InMemoryStorage(configuration.memoryCapacityBytes)
+    internal val inMemoryStorage = InMemoryStorage(configuration.memoryCapacityBytes)
 
     /**
      * [SwapImpl] requires exclusive access to [Configuration.diskDirectory] so that we can create unique file names

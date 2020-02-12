@@ -25,6 +25,9 @@ class SwapImplTest {
         swap
                 .hold(Flowable.empty())
                 .flatMapPublisher {
+                    assertThat(swap.inMemoryStorage.utilizedBytes.get()).isEqualTo(0L)
+                    assertThat(dir.root.listFiles()).isEmpty()
+
                     assertThat(it.bytesTotal).isEqualTo(0)
                     it.chunks
                 }
@@ -47,13 +50,16 @@ class SwapImplTest {
                 ioScheduler = Schedulers.io()
         ))
 
-        val bytes = "Some text".toByteArray()
+        val chunk = "Some text".toByteArray()
+        val originalSizeBytes = chunk.size.toLong()
 
         swap
-                .hold(Flowable.just(bytes))
+                .hold(Flowable.just(chunk))
                 .flatMapPublisher {
-                    assertThat(it.bytesTotal).isEqualTo(bytes.size.toLong())
+                    assertThat(swap.inMemoryStorage.utilizedBytes.get()).isEqualTo(originalSizeBytes)
                     assertThat(dir.root.listFiles()).isEmpty()
+
+                    assertThat(it.bytesTotal).isEqualTo(originalSizeBytes)
                     it.chunks
                 }
                 .test()
@@ -61,7 +67,13 @@ class SwapImplTest {
                 .assertNoErrors()
                 .assertValueCount(1)
                 .assertComplete()
-                .assertValue { chunk -> bytes.contentEquals(chunk) }
+                .values()
+                .single()
+                .also { actual ->
+                    assertThat(chunk)
+                            .describedAs("Chunk must be equal to original: expected = '${String(chunk)}', actual = '${String(actual)}'")
+                            .isEqualTo(actual)
+                }
     }
 
     @Test
@@ -73,14 +85,16 @@ class SwapImplTest {
                 ioScheduler = Schedulers.io()
         ))
 
-        val originalChunks = listOf("Some", "test", "content")
-                .map { it.toByteArray() }
+        val originalChunks = listOf("Some", "test", "content").map { it.toByteArray() }
+        val originalSizeBytes = originalChunks.sumBy { it.size }.toLong()
 
         val chunksFromSwap = swap
                 .hold(Flowable.fromIterable(originalChunks))
                 .flatMapPublisher { dataDescriptor ->
-                    assertThat(dataDescriptor.bytesTotal).isEqualTo(originalChunks.sumBy { it.size }.toLong())
+                    assertThat(swap.inMemoryStorage.utilizedBytes.get()).isEqualTo(originalSizeBytes)
                     assertThat(dir.root.listFiles()).isEmpty()
+
+                    assertThat(dataDescriptor.bytesTotal).isEqualTo(originalSizeBytes)
                     dataDescriptor.chunks
                 }
                 .test()
