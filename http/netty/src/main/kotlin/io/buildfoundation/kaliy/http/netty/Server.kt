@@ -139,6 +139,8 @@ private class Handler(val handlers: Map<Config.Http.Handler, HttpHandler>) : Sim
         val buffer = ctx.alloc().ioBuffer()
         val nettyResponse = DefaultFullHttpResponse(version, HttpResponseStatus(response.code, response.message), buffer)
 
+        // TODO streaming body writes.
+
         ctx
                 .writeAndFlush(nettyResponse)
                 .addListener(ChannelFutureListener.CLOSE)

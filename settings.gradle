@@ -1,6 +1,7 @@
 include ":main"
 include ":config"
 include ":cache-layer"
+include ":cache-layers:in-memory"
 include ":module-loader"
 include ":http:api"
 include ":http:netty"
