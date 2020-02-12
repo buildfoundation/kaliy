@@ -53,6 +53,7 @@ class SwapImplTest {
                 .hold(Flowable.just(bytes))
                 .flatMapPublisher {
                     assertThat(it.bytesTotal).isEqualTo(bytes.size.toLong())
+                    assertThat(dir.root.listFiles()).isEmpty()
                     it.chunks
                 }
                 .test()
@@ -79,6 +80,7 @@ class SwapImplTest {
                 .hold(Flowable.fromIterable(originalChunks))
                 .flatMapPublisher { dataDescriptor ->
                     assertThat(dataDescriptor.bytesTotal).isEqualTo(originalChunks.sumBy { it.size }.toLong())
+                    assertThat(dir.root.listFiles()).isEmpty()
                     dataDescriptor.chunks
                 }
                 .test()
