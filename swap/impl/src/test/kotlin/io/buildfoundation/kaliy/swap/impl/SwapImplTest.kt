@@ -39,7 +39,7 @@ class SwapImplTest {
     }
 
     @Test
-    fun holdOneChunk() {
+    fun holdOneChunkInMemory() {
         val swap = SwapImpl(configuration = SwapImpl.Configuration(
                 memoryCapacityBytes = 10 * 1024 * 1024,
                 diskDirectory = dir.root.toPath(),
@@ -62,4 +62,39 @@ class SwapImplTest {
                 .assertComplete()
                 .assertValue { chunk -> bytes.contentEquals(chunk) }
     }
+
+    @Test
+    fun holdMultipleChunksInMemory() {
+        val swap = SwapImpl(configuration = SwapImpl.Configuration(
+                memoryCapacityBytes = 10 * 1024 * 1024,
+                diskDirectory = dir.root.toPath(),
+                diskCapacityBytes = 20 * 1024 * 1024,
+                ioScheduler = Schedulers.io()
+        ))
+
+        val originalChunks = listOf("Some", "test", "content")
+                .map { it.toByteArray() }
+
+        val chunksFromSwap = swap
+                .hold(Flowable.fromIterable(originalChunks))
+                .flatMapPublisher { dataDescriptor ->
+                    assertThat(dataDescriptor.bytesTotal).isEqualTo(originalChunks.sumBy { it.size }.toLong())
+                    dataDescriptor.chunks
+                }
+                .test()
+                .also { it.awaitTerminalEvent(5, SECONDS) }
+                .assertNoErrors()
+                .assertValueCount(originalChunks.size)
+                .assertComplete()
+                .values()
+
+        chunksFromSwap.forEachIndexed { index, actual ->
+            val expected = originalChunks[index]
+
+            assertThat(expected)
+                    .describedAs("Chunk at index $index must be equal to original: expected = '${String(expected)}', actual = '${String(actual)}'")
+                    .isEqualTo(actual)
+        }
+    }
+
 }

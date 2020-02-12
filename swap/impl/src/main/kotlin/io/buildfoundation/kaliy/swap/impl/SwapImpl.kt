@@ -1,7 +1,10 @@
 package io.buildfoundation.kaliy.swap.impl
 
 import io.buildfoundation.kaliy.swap.Swap
-import io.reactivex.*
+import io.reactivex.Flowable
+import io.reactivex.Scheduler
+import io.reactivex.Single
+import io.reactivex.SingleEmitter
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import java.nio.file.Path
@@ -89,35 +92,20 @@ class SwapImpl(private val configuration: Configuration) : Swap {
             emitter.onSuccess(object : Swap.DataDescriptor {
                 override val bytesTotal: Long = bytesTotal.get()
 
-                // TODO: implement proper backpressure?
-                override val chunks: Flowable<ByteArray> = Flowable
-                        .create(
-                                { emitter ->
-                                    val chunks = if (chunksTotal.get() > 0) Array<Flowable<ByteArray>>(chunksTotal.get()) { index ->
-                                        chunkDescriptors[index]!!.chunk.toFlowable().subscribeOn(configuration.ioScheduler)
-                                    } else Array<Flowable<ByteArray>>(1) { Flowable.just(ByteArray(0)) }
+                override val chunks: Flowable<ByteArray>
+                    get() {
+                        val chunks = if (chunksTotal.get() > 0) Array<Flowable<ByteArray>>(chunksTotal.get()) { index ->
+                            chunkDescriptors[index]!!.chunk.toFlowable().subscribeOn(configuration.ioScheduler)
+                        } else Array<Flowable<ByteArray>>(1) { Flowable.just(ByteArray(0)) }
 
-                                    val disposable = Flowable
-                                            .concatArrayEager(
-                                                    /* maxConcurrency */ 2,
-                                                    /* prefetch */ 2,
-                                                    *chunks
-                                            )
-                                            .subscribe(
-                                                    { chunk -> emitter.onNext(chunk) },
-                                                    { error ->
-                                                        deleteChunkDescriptors(chunkDescriptors)
-                                                        emitter.tryOnError(error)
-                                                    },
-                                                    { // onComplete
-                                                        emitter.onComplete()
-                                                    }
-                                            )
-
-                                    emitter.setDisposable(disposable)
-                                },
-                                BackpressureStrategy.BUFFER
-                        )
+                        return Flowable
+                                .concatArrayEager(
+                                        /* maxConcurrency */ 2,
+                                        /* prefetch */ 2,
+                                        *chunks
+                                )
+                                .doOnError { deleteChunkDescriptors(chunkDescriptors) }
+                    }
             })
         }
     }
