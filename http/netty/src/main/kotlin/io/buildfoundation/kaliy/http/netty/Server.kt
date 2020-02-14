@@ -8,9 +8,7 @@ import io.buildfoundation.kaliy.moduleloader.loadHttpHandler
 import io.netty.bootstrap.ServerBootstrap
 import io.netty.buffer.ByteBufUtil
 import io.netty.channel.*
-import io.netty.channel.nio.NioEventLoopGroup
 import io.netty.channel.socket.SocketChannel
-import io.netty.channel.socket.nio.NioServerSocketChannel
 import io.netty.handler.codec.http.*
 import io.netty.handler.codec.http.HttpHeaderNames.*
 import io.netty.handler.codec.http.HttpHeaderValues.CLOSE
@@ -39,13 +37,15 @@ fun httpServer(config: Config.Http): Completable {
 
         val configsAndHandlers = loadedHandlers.associate { (config, result) -> config to (result as ModuleLoadResult.Ok).instance }
 
-        val bossGroup = NioEventLoopGroup()
-        val workerGroup = NioEventLoopGroup()
+        val bossGroup = newEventLoopPoop()
+        val workerGroup = newEventLoopPoop()
 
         val b = ServerBootstrap()
+
         b.option(ChannelOption.SO_BACKLOG, 1024)
+
         b.group(bossGroup, workerGroup)
-                .channel(NioServerSocketChannel::class.java)
+                .channel(serverSocketChannelClass())
                 .handler(LoggingHandler(LogLevel.INFO))
                 .childHandler(Initializer(configsAndHandlers))
                 .childOption(ChannelOption.SO_KEEPALIVE, true)

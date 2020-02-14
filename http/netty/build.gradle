@@ -12,4 +12,6 @@ dependencies {
 dependencies {
     implementation project(":module-loader")
     implementation libraries.netty
+    implementation libraries.nettyEpoll
+    implementation libraries.nettyKqueue
 }
