@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicLong
 internal class InMemoryStorage(private val capacityBytes: Long) : Storage {
 
     // Reuse same exception to avoid allocation and stacktrace re-capturing.
-    private object NotEnoughMemoryException : Exception()
+    private object NotEnoughMemoryException : Storage.NotEnoughStorageException()
 
     internal val utilizedBytes = AtomicLong()
 

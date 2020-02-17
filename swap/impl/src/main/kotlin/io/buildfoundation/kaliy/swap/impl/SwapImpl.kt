@@ -23,13 +23,14 @@ class SwapImpl(private val configuration: Configuration) : Swap {
             val ioScheduler: Scheduler
     )
 
-    internal val inMemoryStorage = InMemoryStorage(configuration.memoryCapacityBytes)
+    internal val inMemoryStorage = InMemoryStorage(
+            capacityBytes = configuration.memoryCapacityBytes
+    )
 
-    /**
-     * [SwapImpl] requires exclusive access to [Configuration.diskDirectory] so that we can create unique file names
-     * faster than with [java.io.File.createTempFile] (notoriously slow due to use of [java.security.SecureRandom]).
-     */
-    private val filenameGenerator = AtomicInteger()
+    internal val diskStorage = DiskStorage(
+            configuration.diskDirectory.toFile(),
+            capacityBytes = configuration.diskCapacityBytes
+    )
 
     override fun hold(dataChunks: Flowable<ByteArray>): Single<Swap.DataDescriptor> = Single
             .create { emitter ->
@@ -111,6 +112,13 @@ class SwapImpl(private val configuration: Configuration) : Swap {
     }
 
     private fun holdChunk(chunk: ByteArray): Single<ChunkDescriptor> {
-        return inMemoryStorage.hold(chunk)
+        return inMemoryStorage
+                .hold(chunk)
+                .onErrorResumeNext { error ->
+                    when (error) {
+                        is Storage.NotEnoughStorageException -> diskStorage.hold(chunk)
+                        else -> Single.error(error)
+                    }
+                }
     }
 }

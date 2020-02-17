@@ -90,7 +90,7 @@ private class Handler(val handlers: Map<Config.Http.Handler, HttpHandler>) : Sim
         last = msg is LastHttpContent
         when (msg) {
             is HttpRequest -> {
-                url = HttpUrl.get("http://buildcache-stub${msg.uri()}")
+                url = HttpUrl.get("http://kaliy-stub${msg.uri()}")
                 method = msg.method()
                 headers = msg.headers().toOkHttpHeaders()
                 handler = selectHandlerForUrl()

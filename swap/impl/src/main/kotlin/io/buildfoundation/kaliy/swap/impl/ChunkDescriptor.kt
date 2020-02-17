@@ -3,8 +3,14 @@ package io.buildfoundation.kaliy.swap.impl
 import io.reactivex.Single
 
 internal interface ChunkDescriptor {
+
+    object ChunkHasAlreadyBeenReadException : Exception()
+
     /**
      * Lazy representation of actual data chunk stored in-memory or on disk.
+     *
+     * Implementation must signal onError with [ChunkHasAlreadyBeenReadException] if client tries to read the same chunk twice.
+     * Implementation must call [delete] once the chunk has been emitted to the client.
      *
      * Subscribing second time will result in onError signal.
      */
